@@ -124,11 +124,15 @@ export class TodoService {
   //   });
   // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async findOne(id: number): Promise<Todo | undefined> {
+    try {
+      return await this.entityManager.findOne(Todo, { where: { id } });
+    } catch (error) {
+      throw new NotFoundException(`Todo with id ${id} not found`);
+    }
   }
 
-  async update(id: number): Promise<{ userId: number, title: string, date: string, completed: boolean } | undefined> {
+  async update(id: number): Promise<{ title: string, date: string, completed: boolean } | undefined> {
     try {
       const todo = await this.entityManager.findOne(Todo, { where: { id } });
       if (!todo) {
@@ -137,7 +141,6 @@ export class TodoService {
       todo.completed = true;
       await this.entityManager.save(Todo, todo);
       return {
-        userId: parseInt(todo.user.id),
         title: todo.title,
         date: todo.date,
         completed: todo.completed,

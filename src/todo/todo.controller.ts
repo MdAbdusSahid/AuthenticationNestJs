@@ -103,23 +103,30 @@ export class TodoController {
   // }
 
   @Patch(':id')
-  async update(@Param('id') id: string) {
+  async update(@Param('id') id: number) {
     try {
-      const result = await this.todoService.update(Number(id));
+      const result = await this.todoService.update(id);
       if (!result) {
-        return { message: `Todo not found with id ${id}`, statusCode: HttpStatus.NOT_FOUND };
+        throw new NotFoundException(`Todo not found with id ${id}`);
       }
       console.log(result)
       return {
-        message: 'Todo updated successfully', statusCode: HttpStatus.OK, data: result
+        message: 'Todo updated successfully',
+        statusCode: HttpStatus.OK,
+        data: result
       };
     } catch (error) {
-      throw new InternalServerErrorException(
-        {
-          message: `${error.message}`, statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException({
+          message: `Failed to update todo: ${error.message}`,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR
         });
+      }
     }
   }
+
   // @Patch(':id')
   // update(@Param('id', ParseIntPipe) id: number) {
   //   return this.todoService.update(id);
