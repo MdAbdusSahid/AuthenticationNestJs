@@ -25,12 +25,6 @@ export class TodoController {
     }
   }
 
-  // @Post(':userId')
-  // create(@Body(ValidationPipe) createTodoDto: CreateTodoDto, @Param("userId") userId: number) {
-  //   return this.todoService.create(createTodoDto, userId);
-  // }
-
-
   @Get('/findallnotcompleted/:userid')
   async findAllTodosByuseridNotComplited(@Param('userid') userid: number) {
     try {
@@ -50,11 +44,6 @@ export class TodoController {
       }
     }
   }
-  // @Get('/findallnotcompleted/:userId')
-  // findAllTodosByUserIdNotComplited(@Param("userId") userId: number) {
-  //   return this.todoService.findAllTodoByUserNotCompleted(Number(userId));
-  // }
-
 
   @Get('/findallcompleted/:userid')
   async findAllTodosByuseridComplited(@Param('userid') userid: number) {
@@ -75,11 +64,6 @@ export class TodoController {
       }
     }
   }
-  // @Get('/findallcompleted/:userId')
-  // findAllTodosByUserIdComplited(@Param("userId") userId: number) {
-  //   return this.todoService.findAllTodoByUserCompleted(Number(userId));
-  // }
-
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -97,10 +81,6 @@ export class TodoController {
     }
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.todoService.findOne(+id);
-  // }
 
   @Patch(':id')
   async update(@Param('id') id: number) {
@@ -127,17 +107,14 @@ export class TodoController {
     }
   }
 
-  // @Patch(':id')
-  // update(@Param('id', ParseIntPipe) id: number) {
-  //   return this.todoService.update(id);
-  // }
+
   @Delete(':id') async remove(@Param('id') id: string) {
     try {
       const result = await this.todoService.remove(id);
       console.log('Result:', result);
       const currentDate = new Date();
       if (result !== `Todo not found with id: ${id}`) {
-        return { currentDate, statusCode: HttpStatus.OK };
+        return { message: `Todo with id ${id} deleted successfully`, currentDate, statusCode: HttpStatus.OK };
       }
       else {
         return { message: `Todo not found with id ${id}`, statusCode: HttpStatus.NOT_FOUND };
@@ -149,8 +126,5 @@ export class TodoController {
         });
     }
   }
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.todoService.remove(Number(id));
-  // }
+
 }

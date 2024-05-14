@@ -42,16 +42,7 @@ export class TodoService {
       }
     }
   }
-  // async create(createTodoDto: CreateTodoDto, userId: number) {
-  //   let todo: Todo = new Todo();
-  //   todo.title = createTodoDto.title;
-  //   todo.date = new Date().toLocaleDateString();
-  //   todo.completed = false;
-  //   todo.user = await this.userService.findById(userId)
-  //   return this.entityManager.save(todo);
-  // }
-
-  async findAllTodoByUserNotCompleted(userId: number): Promise<{ firstName: string, lastName: string, email: string, title: string, date: string, completed: boolean }[]> {
+  async findAllTodoByUserNotCompleted(userId: number): Promise<{ todoId: number, firstName: string, lastName: string, email: string, title: string, date: string, completed: boolean }[]> {
     try {
       const todos = await this.entityManager.find(Todo, {
         where: {
@@ -69,6 +60,7 @@ export class TodoService {
         firstName: todo.user.firstName,
         lastName: todo.user.lastName,
         email: todo.user.email,
+        todoId: todo.id,
         title: todo.title,
         date: todo.date,
         completed: todo.completed,
@@ -78,17 +70,9 @@ export class TodoService {
     }
   }
 
-  // async findAllTodoByUserNotCompleted(userId: number): Promise<Todo[]> {
-  //   return await this.entityManager.find(Todo, {
-  //     where: {
-  //       user: { id: String(userId) },
-  //       completed: false,
-  //     },
-  //     relations: ['user'],
-  //   });
-  // }
 
-  async findAllTodoByUserCompleted(userId: number): Promise<{ firstName: string, lastName: string, email: string, title: string, date: string, completed: boolean }[]> {
+
+  async findAllTodoByUserCompleted(userId: number): Promise<{ todoId: number, firstName: string, lastName: string, email: string, title: string, date: string, completed: boolean }[]> {
     try {
       const todos = await this.entityManager.find(Todo, {
         where: {
@@ -105,6 +89,7 @@ export class TodoService {
         firstName: todo.user.firstName,
         lastName: todo.user.lastName,
         email: todo.user.email,
+        todoId: todo.id,
         title: todo.title,
         date: todo.date,
         completed: todo.completed,
@@ -114,15 +99,7 @@ export class TodoService {
     }
   }
 
-  // async findAllTodoByUserCompleted(userId: number): Promise<Todo[]> {
-  //   return await this.entityManager.find(Todo, {
-  //     where: {
-  //       user: { id: String(userId) },
-  //       completed: true,
-  //     },
-  //     relations: ['user'],
-  //   });
-  // }
+
 
   async findOne(id: number): Promise<Todo | undefined> {
     try {
@@ -150,14 +127,7 @@ export class TodoService {
     }
   }
 
-  // async update(id: number): Promise<Todo | undefined> {
-  //   const todo = await this.entityManager.findOne(Todo, { where: { id } });
-  //   if (!todo) {
-  //     return undefined;
-  //   }
-  //   todo.completed = true;
-  //   return await this.entityManager.save(Todo, todo);
-  // }
+
 
   async remove(id: string): Promise<String> {
     try {
@@ -170,7 +140,5 @@ export class TodoService {
       throw new NotFoundException(`Todo with ID ${id} not found.`);
     }
   }
-  // async remove(id: number): Promise<void> {
-  //   await this.entityManager.delete(Todo, id);
-  // }
+
 }

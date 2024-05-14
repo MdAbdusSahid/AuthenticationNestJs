@@ -28,8 +28,8 @@ export class UserController {
   async findAll(@Req() req) {
     console.log(req.user)
     try {
-      const message = await this.userService.findAll();
-      return { message, statusCode: HttpStatus.OK }
+      const allUsers = await this.userService.findAll();
+      return { message: "data retived successfully", statusCode: HttpStatus.OK, data: allUsers }
     }
     catch (error) {
       throw new InternalServerErrorException(
@@ -38,12 +38,6 @@ export class UserController {
         });
     }
   }
-  // @Get()
-  // @UseGuards(new RoleGuard(Constants.ROLES.ADMIN_ROLE))
-  // findAll(@Req() req) {
-  //   console.log(req.user)
-  //   return this.userService.findAll();
-  // }
 
   @Get(':email')
   @ApiSecurity("JWT-AUTH")
@@ -87,10 +81,4 @@ export class UserController {
       }
     }
   }
-  // @Delete(':id')
-  // @ApiSecurity("JWT-AUTH")
-  // remove(@Param('id') id: string, @Req() req) {
-  //   console.log(req.user)
-  //   return this.userService.remove(+id);
-  // }
 }

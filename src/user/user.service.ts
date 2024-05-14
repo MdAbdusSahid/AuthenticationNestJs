@@ -33,10 +33,10 @@ export class UserService {
   }
 
 
-  async findAll(): Promise<{ firstName: string, lastName: string, email: string }[]> {
+  async findAll(): Promise<{ userId: string, firstName: string, lastName: string, email: string }[]> {
     try {
       const users = await this.entityManager.find(User, {
-        select: ['firstName', 'lastName', 'email'],
+        select: ['id', 'firstName', 'lastName', 'email'],
       });
 
       if (!users || users.length === 0) {
@@ -44,6 +44,7 @@ export class UserService {
       }
 
       return users.map(user => ({
+        userId: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -52,9 +53,6 @@ export class UserService {
       throw new NotFoundException('Error while fetching users', error.message);
     }
   }
-  // async findAll(): Promise<User[]> {
-  //   return this.entityManager.find(User);
-  // }
 
   async findByEmail(email: string): Promise<User | null> {
     try {
@@ -81,12 +79,4 @@ export class UserService {
       return `Error deleting user with id ${id}: ${error.message}`;
     }
   }
-  // async remove(id: number): Promise<User | undefined> {
-  //   const userToDelete = await this.entityManager.findOne(User, { where: { id: String(id) } });
-  //   if (!userToDelete) {
-  //     return undefined;
-  //   }
-  //   await this.entityManager.delete(User, id);
-  //   return userToDelete;
-  // }
 }
